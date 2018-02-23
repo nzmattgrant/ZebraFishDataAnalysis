@@ -14,7 +14,7 @@ def create_averaged_row(rows_to_combine, group_num):
         'group': group_num,
         'lardur': total_lardur / len(rows_to_combine),
         'lardist': total_lardist / len(rows_to_combine),
-        'sttime': sttime.strftime('%H:%M')
+        'sttime': sttime.strftime('%H:%M:%S')
     }
     return return_row
 file = pd.ExcelFile("96 cells again.xlsx")
