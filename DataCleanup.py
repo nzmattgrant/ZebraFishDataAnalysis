@@ -1,5 +1,5 @@
 import pandas as pd
-
+#Todo put the different groups in different excel sheets
 def create_averaged_row(rows_to_combine, group_num):
     if len(rows_to_combine) < 1:
         return None
