@@ -59,7 +59,7 @@ def get_non_blank_labels_with_indexes(x_ticks):
     label_index_dict = {}
     for index, x_tick in enumerate(x_ticks):
         x_tick_string = x_tick.get_text()
-        if x_tick_string == day_label:
+        if x_tick_string == day_label or x_tick_string == night_label:
             label_index_dict[index/2] = x_tick_string
     return label_index_dict
 
@@ -75,7 +75,7 @@ def create_plots():
     # get the first label in the list that is not ""
     is_day = len(index_dict) > 0 and index_dict[list(index_dict.keys())[0]] == day_label
     for index, row in enumerate(x_tick_lines):
-        useful_line_index = index / 2
+        useful_line_index = index/4
         # for some reason there is a dummy line every second line that adds nothing
         if index != 0 and index_dict.keys().__contains__(useful_line_index):
             is_day = not is_day
