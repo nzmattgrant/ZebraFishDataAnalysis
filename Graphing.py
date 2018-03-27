@@ -7,18 +7,19 @@ import datetime
 from datetime import timedelta
 import math
 
-night_start_time_string = '21:00'
-day_start_time_string = '05:00'
+night_start_time_string = '23:59'
+day_start_time_string = '10:00'
 night_label = 'night'
 day_label = 'day'
 group_label = 'group'
 timestamp_column_label = 'sttime'
-duration_column_label = 'lardur'
+duration_column_label = 'lardist'
 day_color = '#ffcc00'
 night_color = '#000000'
 
-file = pd.ExcelFile("pandas_simple.xlsx")
+file = pd.ExcelFile("Day 8.xlsx")
 df = file.parse("Sheet1")
+number_of_groups = 2
 
 def get_datetime_from_date_and_timestamp(date_time, time_string, use_seconds=True):
     format_string = "%Y-%m-%d %H:%M" + (":%S" if use_seconds else "")
@@ -76,13 +77,13 @@ def get_bulked_out_labels_for_timestamps(timestamp_list):
 
     return x_labels
 
-def create_sub_plot_for_group(group_number):
+def create_sub_plot_for_group(group_number, label):
     df_for_group = df.loc[df[group_label] == group_number].reset_index(drop=True)
     timestamp_list = df_for_group[[timestamp_column_label]].values.tolist()
     x_labels = get_bulked_out_labels_for_timestamps(timestamp_list)
     timestamp_list_len = len(timestamp_list)
     timestamp_range = range(timestamp_list_len)
-    plt.plot(df_for_group[duration_column_label])
+    plt.plot(df_for_group[duration_column_label], label=label)
     plt.xticks(timestamp_range, x_labels)
 
 def get_non_blank_labels_with_indexes(x_ticks):
@@ -151,12 +152,12 @@ def create_xticks():
     ax.add_collection(lc)
     ax.spines["bottom"].set_visible(False)
     ax.set_xticks(x)
+    ax.legend(loc="upper right")
     print(label_counts)
 
 def create_plots():
-    create_sub_plot_for_group(1)
-    create_sub_plot_for_group(2)
-    create_sub_plot_for_group(3)
+    for group_number in range(1, number_of_groups + 1):
+        create_sub_plot_for_group(group_number, 'group ' + str(group_number))
     create_xticks()
 
     plt.margins(0)

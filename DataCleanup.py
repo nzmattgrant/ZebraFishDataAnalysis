@@ -1,5 +1,8 @@
 import pandas as pd
 #Todo put the different groups in different excel sheets
+number_of_cells = 96
+number_of_groups = 2
+
 def create_averaged_row(rows_to_combine, group_num):
     if len(rows_to_combine) < 1:
         return None
@@ -17,23 +20,24 @@ def create_averaged_row(rows_to_combine, group_num):
         'sttime': sttime.strftime('%H:%M:%S')
     }
     return return_row
-file = pd.ExcelFile("96 cells again.xlsx")
-df = file.parse("96 well test")
+file = pd.ExcelFile("96 well dist tracking day 5 LD 22-03-18.xlsx")
+df = file.parse("96 well dist tracking day 5 LD")
 df = df[df.index % 2 == 0].reset_index(drop=True)
 group_timeslice_rows = []
 averaged_rows = []
 group_num = 1
 for index, row in df.iterrows():
     group_timeslice_rows.append(row)
-    if (index + 1) % 32 == 0:
+    group_size = number_of_cells/number_of_groups
+    if (index + 1) % (group_size) == 0:
         averaged_rows.append(create_averaged_row(group_timeslice_rows, group_num))
         group_timeslice_rows = []
-        if group_num == 3:
+        if group_num == number_of_groups:
             group_num = 0
         group_num += 1
 
 output_df = pd.DataFrame(averaged_rows)
 
-writer = pd.ExcelWriter('pandas_simple.xlsx', engine='xlsxwriter', datetime_format='hh:mm:ss')
+writer = pd.ExcelWriter('Day 8.xlsx', engine='xlsxwriter', datetime_format='hh:mm:ss')
 output_df.to_excel(writer, sheet_name='Sheet1')
 writer.save()
