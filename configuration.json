@@ -12,5 +12,8 @@
 			"sheetName": "day 3"
 		},
 	],
-	"cellsToExlude": [] //Add the cell numbers in the square brackets seperated by commas e.g. [7, 36]
+	"wellsToExclude": [], //Add the cell numbers in the square brackets seperated by commas e.g. [7, 36]
+	"startDay": 5,
+	"isCombiningToAverage": true,
+	"dataType": "lardur" //Possible values are "lardur", "lardist"
 }
