@@ -1,18 +1,17 @@
 import pandas as pd
 import Configuration
 #Todo put the different groups in different excel sheets
-config = {}
 
-def create_averaged_row(rows_to_combine, group_num):
+def create_averaged_row(config, rows_to_combine, group_num):
     if len(rows_to_combine) < 1:
         return None
 
     total_lardur = 0
     total_lardist = 0
-    sttime = rows_to_combine[0]['sttime']
+    sttime = rows_to_combine[0][config.timeColumn]
     for row in rows_to_combine:
-        total_lardur += row['lardur']
-        total_lardist += row['lardist']
+        total_lardur += row[config.durationColumn]
+        total_lardist += row[config.distanceColumn]
 
     return_row = {
         'group': group_num,
@@ -26,6 +25,12 @@ def create_averaged_row(rows_to_combine, group_num):
 def process_data_files(is_skipping_average):
 
     config = Configuration('configuration.json')
+    #load in the xls data files
+
+    #set up an output file name
+    #for each file in the config files
+    #open the file up and save it with the xslx extension
+    #
 
     file = pd.ExcelFile("96 well dist tracking day 5 LD 22-03-18.xlsx")
     df = file.parse("96 well dist tracking day 5 LD")
@@ -37,7 +42,7 @@ def process_data_files(is_skipping_average):
         group_timeslice_rows.append(row)
         group_size = config.numberOfCells / config.numberOfGroups
         if (index + 1) % (group_size) == 0:
-            averaged_rows.append(create_averaged_row(group_timeslice_rows, group_num))
+            averaged_rows.append(create_averaged_row(config, group_timeslice_rows, group_num))
             group_timeslice_rows = []
             if group_num == config.numberOfGroups:
                 group_num = 0

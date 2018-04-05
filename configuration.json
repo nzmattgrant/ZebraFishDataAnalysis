@@ -10,10 +10,24 @@
 		{
 			"fileName": "day 3.xlsx",
 			"sheetName": "day 3"
-		},
+		}
 	],
-	"wellsToExclude": [], //Add the cell numbers in the square brackets seperated by commas e.g. [7, 36]
-	"startDay": 5,
-	"isCombiningToAverage": true,
-	"dataType": "lardur" //Possible values are "lardur", "lardist"
+	"outputFileName": "data_cleaned.xlsx",
+	"wellsToExclude": [],
+	"startDay": "5",
+	"xAxisColumn": "lardur",
+	"numberOfCells": "96",
+	"numberOfGroups": "2",
+	"timeColumn": "sttime",
+	"distanceColumn": "lardist",
+	"durationColumn": "lardur",
+	"nightStartTime": "23:59",
+	"dayStartTime": "08:00",
+	"dayColor": "#ffcc00",
+	"nightColor": "#000000",
+	"usage": [
+		"This property is for documentation purposes only. to use this configuration file change the values that you want changed before running the program.",
+		"To update the wells to exclude you would update the property 'wellsToExclude' and add the cell numbers in the square brackets separated by commas e.g. [7, 36]",
+		"Possible values of 'xAxisColumn' are the values specified in 'distanceColumn' or 'durationColumn' e.g. lardist or or lardur"
+	]
 }

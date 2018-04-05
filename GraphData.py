@@ -129,6 +129,8 @@ def create_xticks():
     x = [0]
     x_minor_values = []
     x_minor_labels = []
+    #find the starting period (e.g. get the first x_tick_label and figure out what it is)
+    #after each
     for index, label_count in enumerate(label_counts.values()):
         color_collection.append(current_color)
         next_x_tick_value = label_count + x[index]
@@ -155,7 +157,12 @@ def create_xticks():
     ax.legend(loc="upper right")
     print(label_counts)
 
-def create_plots():
+def create_plots(is_skipping_average):
+
+    #Read in all the files via the Process data module
+    #spit this out as a file
+    #Once we have the data then we want to create the plots from it using the info we need
+
     for group_number in range(1, number_of_groups + 1):
         create_sub_plot_for_group(group_number, 'group ' + str(group_number))
     create_xticks()
@@ -163,4 +170,8 @@ def create_plots():
     plt.margins(0)
     plt.show()
 
-create_plots()
+def Main():
+   pass
+
+if __name__ == "__main__":
+    Main()
