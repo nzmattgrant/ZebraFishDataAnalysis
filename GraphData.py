@@ -5,7 +5,6 @@ from matplotlib.collections import LineCollection
 import matplotlib.ticker as ticker
 import datetime
 from datetime import timedelta
-import math
 
 from Configuration import Configuration
 
@@ -23,32 +22,6 @@ night_color = '#000000'
 def get_datetime_from_date_and_timestamp(date_time, time_string, use_seconds=True):
     format_string = "%Y-%m-%d %H:%M" + (":%S" if use_seconds else "")
     return datetime.datetime.strptime(str(date_time) + " " + time_string, format_string)
-
-def get_labels_for_timestamps(timestamp_list):
-    x_labels = []
-    current_date = datetime.date.today()
-    previous_datetime = datetime.datetime.min
-    last_label = None
-
-    for index, val in enumerate(timestamp_list):
-        current_datetime = get_datetime_from_date_and_timestamp(current_date, val[0])
-        if current_datetime < previous_datetime and last_label is not None:
-            current_date = current_date + timedelta(days=1)
-            current_datetime = get_datetime_from_date_and_timestamp(current_date, val[0])
-        night_start_today = get_datetime_from_date_and_timestamp(current_date, config.nightStartTime, False)
-        morning_start_today = get_datetime_from_date_and_timestamp(current_date, config.dayStartTime, False)
-        is_night = current_datetime > night_start_today or current_datetime < morning_start_today
-        is_day = is_night is False
-        is_night_to_day_change = (last_label == night_label or last_label is None) and is_day
-        is_day_to_night_change = (last_label == day_label or last_label is None) and is_night
-        is_day_night_cycle_change = last_label is None or is_day_to_night_change or is_night_to_day_change
-        current_label = day_label if is_day else night_label
-        if is_day_night_cycle_change:
-            previous_datetime = current_datetime
-            last_label = current_label
-        x_labels.append(current_label if is_day_night_cycle_change else "")
-
-    return x_labels
 
 def get_bulked_out_labels_for_timestamps(timestamp_list):
     x_labels = []
@@ -126,12 +99,7 @@ def create_xticks():
         x_tick_text_object.set_visible(False)
         x_tick_labels.append(x_tick_text_object.get_text())
 
-
     label_counts = get_night_and_day_label_count(x_tick_labels)
-
-    #give the first value the start number
-    #track if it is night or day
-    #if it's a day to night transition then skip the
 
     x = [0]
     x_minor_values = []
