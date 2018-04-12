@@ -1,30 +1,34 @@
 {
-	"inputFiles": [{
-			"fileName": "day 1.xlsx",
-			"sheetName": "day 1"
-		},
-		{
-			"fileName": "day 2.xlsx",
-			"sheetName": "day 2"
-		},
-		{
-			"fileName": "day 3.xlsx",
-			"sheetName": "day 3"
-		}
-	],
+	"inputFileDirectory": "InputFiles",
+	"inputFileSheetName": "Data",
 	"outputFileName": "data_cleaned.xlsx",
-	"wellsToExclude": [],
-	"startDay": "5",
-	"xAxisColumn": "lardur",
-	"numberOfCells": "96",
-	"numberOfGroups": "2",
+	"outputFileSheetName": "Data",
+	"wellsToExclude": [84,85,86,87,88,89,90,91,92,93,94,95,96],
+	"individualFishToInclude": [],
+	"xAxisColumn": "lardist",
+	"groups": [{
+			"label": "Wild type",
+			"color": "black"
+		},
+		{
+			"label": "Mutant",
+			"color": "purple"
+		}],
+	"xAxisLabel": "Days",
+	"yAxisLabel": "Distance moved (mm/10 mins)",
 	"timeColumn": "sttime",
 	"distanceColumn": "lardist",
 	"durationColumn": "lardur",
 	"nightStartTime": "23:59",
-	"dayStartTime": "08:00",
+	"dayStartTime": "10:00",
 	"dayColor": "#ffcc00",
 	"nightColor": "#000000",
+	"startDay": 5,
+	"numberOfCells": 96,
+	"isShowingStandardError": true,
+	"isDroppingEverySecondRow": true,
+	"isProcessingDataFirst": true,
+	"isShowingIndividualFish": false,
 	"usage": [
 		"This property is for documentation purposes only. to use this configuration file change the values that you want changed before running the program.",
 		"To update the wells to exclude you would update the property 'wellsToExclude' and add the cell numbers in the square brackets separated by commas e.g. [7, 36]",
