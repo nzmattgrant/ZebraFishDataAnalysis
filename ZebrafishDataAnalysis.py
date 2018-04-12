@@ -1,17 +1,15 @@
-import argparse
+import ProcessData
 import GraphData
+from Configuration import Configuration
 
 def Main():
 
-    parser = argparse.ArgumentParser(description='Graph some fish data')
-    parser.add_argument('--skipaverage', type=bool, nargs='+',
-                   help='skips the averaging and creates a graph for each fish')
+    config = Configuration('configuration.json')
 
-    args = parser.parse_args()
+    if config.isProcessingDataFirst:
+        ProcessData.process_data_files()
 
-    is_skipping_average = False if args.skipaverage is None else args.skipaverage
-
-    GraphData.create_plots(is_skipping_average)
+    GraphData.create_plots()
 
 if __name__ == "__main__":
     Main()
