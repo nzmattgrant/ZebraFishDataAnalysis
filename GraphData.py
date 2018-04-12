@@ -7,8 +7,10 @@ import datetime
 from datetime import timedelta
 import math
 
-night_start_time_string = '23:59'
-day_start_time_string = '10:00'
+from Configuration import Configuration
+
+config = Configuration('configuration.json')
+
 night_label = 'night'
 day_label = 'day'
 group_label = 'group'
@@ -17,9 +19,6 @@ duration_column_label = 'lardist'
 day_color = '#ffcc00'
 night_color = '#000000'
 
-file = pd.ExcelFile("Day 8.xlsx")
-df = file.parse("Sheet1")
-number_of_groups = 2
 
 def get_datetime_from_date_and_timestamp(date_time, time_string, use_seconds=True):
     format_string = "%Y-%m-%d %H:%M" + (":%S" if use_seconds else "")
@@ -36,8 +35,8 @@ def get_labels_for_timestamps(timestamp_list):
         if current_datetime < previous_datetime and last_label is not None:
             current_date = current_date + timedelta(days=1)
             current_datetime = get_datetime_from_date_and_timestamp(current_date, val[0])
-        night_start_today = get_datetime_from_date_and_timestamp(current_date, night_start_time_string, False)
-        morning_start_today = get_datetime_from_date_and_timestamp(current_date, day_start_time_string, False)
+        night_start_today = get_datetime_from_date_and_timestamp(current_date, config.nightStartTime, False)
+        morning_start_today = get_datetime_from_date_and_timestamp(current_date, config.dayStartTime, False)
         is_night = current_datetime > night_start_today or current_datetime < morning_start_today
         is_day = is_night is False
         is_night_to_day_change = (last_label == night_label or last_label is None) and is_day
@@ -62,8 +61,8 @@ def get_bulked_out_labels_for_timestamps(timestamp_list):
         if current_datetime < previous_datetime and last_label is not None:
             current_date = current_date + timedelta(days=1)
             current_datetime = get_datetime_from_date_and_timestamp(current_date, val[0])
-        night_start_today = get_datetime_from_date_and_timestamp(current_date, night_start_time_string, False)
-        morning_start_today = get_datetime_from_date_and_timestamp(current_date, day_start_time_string, False)
+        night_start_today = get_datetime_from_date_and_timestamp(current_date, config.nightStartTime, False)
+        morning_start_today = get_datetime_from_date_and_timestamp(current_date, config.dayStartTime, False)
         is_night = current_datetime > night_start_today or current_datetime < morning_start_today
         is_day = is_night is False
         is_night_to_day_change = (last_label == night_label or last_label is None) and is_day
@@ -77,13 +76,19 @@ def get_bulked_out_labels_for_timestamps(timestamp_list):
 
     return x_labels
 
-def create_sub_plot_for_group(group_number, label):
+def create_sub_plot_for_group(group_number):
+    group = config.groups[group_number - 1];
+    color = group["color"]
+    label = group["label"]
+
+    file = pd.ExcelFile(config.outputFileName)
+    df = file.parse(config.outputFileSheetName)
     df_for_group = df.loc[df[group_label] == group_number].reset_index(drop=True)
     timestamp_list = df_for_group[[timestamp_column_label]].values.tolist()
     x_labels = get_bulked_out_labels_for_timestamps(timestamp_list)
     timestamp_list_len = len(timestamp_list)
     timestamp_range = range(timestamp_list_len)
-    plt.plot(df_for_group[duration_column_label], label=label)
+    plt.plot(df_for_group[duration_column_label], label=label, color=color)
     plt.xticks(timestamp_range, x_labels)
 
 def get_non_blank_labels_with_indexes(x_ticks):
@@ -124,20 +129,34 @@ def create_xticks():
 
     label_counts = get_night_and_day_label_count(x_tick_labels)
 
-    color_collection = []
-    current_color = day_color if x_tick_labels[0] == day_label else night_color
+    #give the first value the start number
+    #track if it is night or day
+    #if it's a day to night transition then skip the
+
     x = [0]
     x_minor_values = []
     x_minor_labels = []
-    #find the starting period (e.g. get the first x_tick_label and figure out what it is)
-    #after each
+    current_day = config.startDay
+
+    color_collection = []
+    current_color = day_color if x_tick_labels[0] == day_label else night_color
+    previous_color = None
+
     for index, label_count in enumerate(label_counts.values()):
         color_collection.append(current_color)
+
         next_x_tick_value = label_count + x[index]
-        next_x_minor_tick_value = math.floor(x[index] + (label_count / 2))
         x.append(next_x_tick_value)
-        x_minor_values.append(next_x_minor_tick_value)
-        x_minor_labels.append(day_label if current_color == day_color else night_label)
+
+        next_x_minor_tick_value = x[index]
+
+        #day transition
+        if current_color == day_color and (previous_color is None or previous_color == night_color):
+            x_minor_labels.append(current_day)
+            x_minor_values.append(next_x_minor_tick_value)
+            current_day = current_day + 1
+
+        previous_color = current_color
         current_color = night_color if current_color == day_color else day_color
 
     y = np.zeros(len(label_counts) + 1)
@@ -154,17 +173,15 @@ def create_xticks():
     ax.add_collection(lc)
     ax.spines["bottom"].set_visible(False)
     ax.set_xticks(x)
+    ax.set_ylabel(config.yAxisLabel)
+    ax.set_xlabel(config.xAxisLabel)
     ax.legend(loc="upper right")
     print(label_counts)
 
-def create_plots(is_skipping_average):
+def create_plots():
 
-    #Read in all the files via the Process data module
-    #spit this out as a file
-    #Once we have the data then we want to create the plots from it using the info we need
-
-    for group_number in range(1, number_of_groups + 1):
-        create_sub_plot_for_group(group_number, 'group ' + str(group_number))
+    for group_number in range(1, len(config.groups) + 1):
+        create_sub_plot_for_group(group_number)
     create_xticks()
 
     plt.margins(0)
