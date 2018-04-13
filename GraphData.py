@@ -5,6 +5,7 @@ from matplotlib.collections import LineCollection
 import matplotlib.ticker as ticker
 import datetime
 from datetime import timedelta
+import math
 
 from Configuration import Configuration
 
@@ -49,14 +50,11 @@ def get_bulked_out_labels_for_timestamps(timestamp_list):
 
     return x_labels
 
-def create_sub_plot_for_group(group_number):
-    group = config.groups[group_number - 1];
-    color = group["color"]
-    label = group["label"]
+def create_sub_plot_for_group(color, label):
 
     file = pd.ExcelFile(config.outputFileName)
-    df = file.parse(config.outputFileSheetName)
-    df_for_group = df.loc[df[group_label] == group_number].reset_index(drop=True)
+    df_for_group = file.parse(label)
+    #df_for_group = df.loc[df[group_label] == group_number].reset_index(drop=True)
     timestamp_list = df_for_group[[timestamp_column_label]].values.tolist()
     x_labels = get_bulked_out_labels_for_timestamps(timestamp_list)
     timestamp_list_len = len(timestamp_list)
@@ -146,14 +144,34 @@ def create_xticks():
     ax.legend(loc="upper right")
     print(label_counts)
 
-def create_plots():
 
+def create_plots_for_single_fish():
+
+    group_size = config.numberOfCells / len(config.groups)
+    for well_number in range(1, config.numberOfCells + 1):
+        current_group_index = math.floor((well_number - 1) / group_size)
+        group = config.groups[current_group_index]
+        create_sub_plot_for_group(group["color"], group["label"] + " well number " + str(well_number))
+        create_xticks()
+        plt.title(group["label"] + " well number " + str(well_number))
+        plt.margins(0)
+        plt.show()
+
+
+def create_plots_for_fish_groups():
     for group_number in range(1, len(config.groups) + 1):
-        create_sub_plot_for_group(group_number)
+        group = config.groups[group_number - 1]
+        create_sub_plot_for_group(group["color"], group["label"])
     create_xticks()
 
     plt.margins(0)
     plt.show()
+
+def create_plots():
+    if config.isShowingIndividualFish:
+        create_plots_for_single_fish()
+    else:
+        create_plots_for_fish_groups()
 
 def Main():
    pass

@@ -9,7 +9,8 @@ def Main():
     if config.isProcessingDataFirst:
         ProcessData.process_data_files()
 
-    GraphData.create_plots()
+    if config.isGeneratingGraph:
+        GraphData.create_plots()
 
 if __name__ == "__main__":
     Main()
