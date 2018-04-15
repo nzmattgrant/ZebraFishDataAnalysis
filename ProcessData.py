@@ -3,6 +3,8 @@ from os import listdir
 from os.path import isfile, join
 from Configuration import Configuration
 import math
+from scipy import stats
+import numpy
 
 config = Configuration('configuration.json')
 
@@ -12,17 +14,16 @@ def create_averaged_row(rows_to_combine, group_num):
     if len(rows_to_combine) < 1:
         return None
 
-    total_lardur = 0
-    total_lardist = 0
     sttime = rows_to_combine[0][config.timeColumn]
-    for row in rows_to_combine:
-        total_lardur += row[config.durationColumn]
-        total_lardist += row[config.distanceColumn]
+    lardurs = [r[config.durationColumn] for r in rows_to_combine]
+    lardists = [r[config.distanceColumn] for r in rows_to_combine]
 
     return_row = {
         'group': group_num,
-        'lardur': total_lardur / len(rows_to_combine),
-        'lardist': total_lardist / len(rows_to_combine),
+        'lardur': numpy.mean(lardurs),
+        'lardur_standard_error': stats.sem(lardurs),
+        'lardist': numpy.mean(lardists),
+        'lardist_standard_error': stats.sem(lardists),
         'sttime': sttime.strftime('%H:%M:%S')
     }
     return return_row
@@ -137,6 +138,8 @@ def process_data_files():
         process_data_files_individual_fish(input_xlsx_files)
     else:
         process_data_files_for_fish_groups(input_xlsx_files)
+
+    print("data processing step complete")
 
 
 def Main():

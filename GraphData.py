@@ -6,6 +6,7 @@ import matplotlib.ticker as ticker
 import datetime
 from datetime import timedelta
 import math
+import os
 
 from Configuration import Configuration
 
@@ -15,7 +16,6 @@ night_label = 'night'
 day_label = 'day'
 group_label = 'group'
 timestamp_column_label = 'sttime'
-duration_column_label = 'lardist'
 day_color = '#ffcc00'
 night_color = '#000000'
 
@@ -50,16 +50,19 @@ def get_bulked_out_labels_for_timestamps(timestamp_list):
 
     return x_labels
 
-def create_sub_plot_for_group(color, label):
+def create_sub_plot_data_set(color, label, isErrorPlot=False):
 
     file = pd.ExcelFile(config.outputFileName)
     df_for_group = file.parse(label)
-    #df_for_group = df.loc[df[group_label] == group_number].reset_index(drop=True)
     timestamp_list = df_for_group[[timestamp_column_label]].values.tolist()
     x_labels = get_bulked_out_labels_for_timestamps(timestamp_list)
     timestamp_list_len = len(timestamp_list)
     timestamp_range = range(timestamp_list_len)
-    plt.plot(df_for_group[duration_column_label], label=label, color=color)
+    std_error_column = config.xAxisColumn + "_standard_error"
+    if isErrorPlot:
+        plt.errorbar(y=df_for_group[config.xAxisColumn], x=timestamp_range, yerr=df_for_group[std_error_column], label=label, color=color, errorevery=1, elinewidth=0.75, capsize=2)
+    else:
+        plt.plot(df_for_group[config.xAxisColumn], label=label, color=color)
     plt.xticks(timestamp_range, x_labels)
 
 def get_non_blank_labels_with_indexes(x_ticks):
@@ -128,7 +131,6 @@ def create_xticks():
     y = np.zeros(len(label_counts) + 1)
 
     ax = plt.gca()
-
     ax.xaxis.set_minor_locator(ticker.FixedLocator(x_minor_values))
     ax.xaxis.set_minor_formatter(ticker.FixedFormatter(x_minor_labels))
 
@@ -142,26 +144,35 @@ def create_xticks():
     ax.set_ylabel(config.yAxisLabel)
     ax.set_xlabel(config.xAxisLabel)
     ax.legend(loc="upper right")
-    print(label_counts)
+    #print(label_counts)
 
 
 def create_plots_for_single_fish():
 
     group_size = config.numberOfCells / len(config.groups)
     for well_number in range(1, config.numberOfCells + 1):
+        plt.cla()
         current_group_index = math.floor((well_number - 1) / group_size)
         group = config.groups[current_group_index]
-        create_sub_plot_for_group(group["color"], group["label"] + " well number " + str(well_number))
+        label = group["label"] + " well number " + str(well_number)
+        create_sub_plot_data_set(group["color"], label)
         create_xticks()
         plt.title(group["label"] + " well number " + str(well_number))
         plt.margins(0)
-        plt.show()
+
+        output_directory = "OutputGraphs"
+
+        if not os.path.exists(output_directory):
+            os.makedirs(output_directory)
+
+
+        plt.savefig(output_directory + "/" + label)
 
 
 def create_plots_for_fish_groups():
     for group_number in range(1, len(config.groups) + 1):
         group = config.groups[group_number - 1]
-        create_sub_plot_for_group(group["color"], group["label"])
+        create_sub_plot_data_set(group["color"], group["label"], config.isShowingStandardError)
     create_xticks()
 
     plt.margins(0)

@@ -8,7 +8,7 @@
 	"xAxisColumn": "lardist",
 	"groups": [{
 			"label": "Wild type",
-			"color": "black"
+			"color": "green"
 		},
 		{
 			"label": "Mutant",
@@ -27,8 +27,8 @@
 	"numberOfCells": 96,
 	"isShowingStandardError": true,
 	"isDroppingEverySecondRow": true,
-	"isProcessingDataFirst": true,
-	"isGeneratingGraph": false,
+	"isProcessingDataFirst": false,
+	"isGeneratingGraph": true,
 	"isShowingIndividualFish": true,
 	"usage": [
 		"This property is for documentation purposes only. to use this configuration file change the values that you want changed before running the program.",

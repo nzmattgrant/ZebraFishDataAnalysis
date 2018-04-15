@@ -6,7 +6,7 @@ $excel.visible = $true
 $folderpath = $PSScriptRoot
 $filetype ="*.xls"
 Get-ChildItem -Path $folderpath -Include $filetype -recurse | 
-ForEach-Object{
+ForEach-Object {
 	$path = ($_.fullname).substring(0, ($_.FullName).lastindexOf("."))
 	
 	"Converting $path"
@@ -17,6 +17,8 @@ ForEach-Object{
 	$path += ".xlsx"
 	$workbook.saveas($path, $xlFixedFormat)
 	$workbook.close()	
+	
+	$_.Delete()
 }
 $excel.Quit()
 $excel = $null
