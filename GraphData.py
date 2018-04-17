@@ -15,7 +15,6 @@ config = Configuration('configuration.json')
 night_label = 'night'
 day_label = 'day'
 group_label = 'group'
-timestamp_column_label = 'sttime'
 day_color = '#ffcc00'
 night_color = '#000000'
 
@@ -54,7 +53,7 @@ def create_sub_plot_data_set(color, label, isErrorPlot=False):
 
     file = pd.ExcelFile(config.outputFileName)
     df_for_group = file.parse(label)
-    timestamp_list = df_for_group[[timestamp_column_label]].values.tolist()
+    timestamp_list = df_for_group[[config.timestampColumn]].values.tolist()
     x_labels = get_bulked_out_labels_for_timestamps(timestamp_list)
     timestamp_list_len = len(timestamp_list)
     timestamp_range = range(timestamp_list_len)

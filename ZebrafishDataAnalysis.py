@@ -1,5 +1,6 @@
 import ProcessData
 import GraphData
+import FormatDataForClockLab
 from Configuration import Configuration
 
 def Main():
@@ -11,6 +12,9 @@ def Main():
 
     if config.isGeneratingGraph:
         GraphData.create_plots()
+
+    if config.isGeneratingClocklabFiles:
+        FormatDataForClockLab.create_clock_lab_formatted_file()
 
 if __name__ == "__main__":
     Main()
