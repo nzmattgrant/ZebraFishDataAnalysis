@@ -21,26 +21,25 @@ def write_file_lines(file, df):
             date_time = get_datetime_from_date_and_timestamp(current_date.date(), row[config.timestampColumn])
         previous_date_time = date_time
         value = row[config.xAxisColumn]
-        date_format = "%d-%m-%y %I:%M:%S%p"
+        date_format = "%m-%d-%y %I:%M:%S%p"
         formatted_date = date_time.strftime(date_format).lower()
-        file.write(formatted_date + "  " + str(value) + "\n")
+        file.write(formatted_date + "  " + '{0:0.3f}'.format(value).zfill(9) + "\n")
+
+def write_to_file(file_name, df_for_group):
+    with open(file_name, 'w') as file:
+        file.write('# COLUMN      ID                      CHANNEL             DATATYPE                UNITS\n')
+        file.write('# 1           ' + file_name + '   1                   Distance                mm\n')
+        file.write("\n")
+        file.write("START TIME:\n")
+        write_file_lines(file, df_for_group)
 
 def create_clock_lab_formatted_file():
-    if config.isShowingIndividualFish:
-        return
-
-    for group in config.groups:
-        file = pd.ExcelFile(config.outputFileName)
-        label = group["label"]
-        df_for_group = file.parse(label)
-        file_name = config.startDate + " " + label + ".bbcl"
-        #todo change the distance part to be dynamic
-        with open(file_name, 'w') as file:
-            file.write('# COLUMN      ID                      CHANNEL             DATATYPE                UNITS\n')
-            file.write('# 1           ' + file_name + '   1                   Distance                mm\n')
-            file.write("\n")
-            file.write("START TIME:\n")
-            write_file_lines(file, df_for_group)
+    file = pd.ExcelFile(config.outputFileName)
+    sheet_names = file.sheet_names
+    for sheet_name in sheet_names:
+        df_for_group = file.parse(sheet_name)
+        file_name = config.startDate + " " + sheet_name + ".bbcl"
+        write_to_file(file_name, df_for_group)
 
 def Main():
     pass
