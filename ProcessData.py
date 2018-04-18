@@ -79,8 +79,6 @@ def get_transormed_data_from_input_file_for_fish_groups(fileName):
             group_num += 1
     return averaged_rows
 
-
-
 def get_transormed_data_from_input_file_for_individual_fish(fileName):
 
     rows = []

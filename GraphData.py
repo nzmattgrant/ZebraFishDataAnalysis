@@ -167,15 +167,29 @@ def create_plots_for_single_fish():
 
         plt.savefig(output_directory + "/" + label)
 
-
-def create_plots_for_fish_groups():
+def create_combined_plots_for_groups():
     for group_number in range(1, len(config.groups) + 1):
         group = config.groups[group_number - 1]
         create_sub_plot_data_set(group["color"], group["label"], config.isShowingStandardError)
-    create_xticks()
 
+    create_xticks()
     plt.margins(0)
     plt.show()
+
+def create_seperate_plots_for_groups():
+    for group_number in range(1, len(config.groups) + 1):
+        plt.cla()
+        group = config.groups[group_number - 1]
+        create_sub_plot_data_set(group["color"], group["label"], config.isShowingStandardError)
+        create_xticks()
+        plt.margins(0)
+        plt.show()
+
+def create_plots_for_fish_groups():
+    if config.isShowingSingleGraphPerGroup:
+        create_seperate_plots_for_groups()
+    else:
+        create_combined_plots_for_groups()
 
 def create_plots():
     if config.isShowingIndividualFish:
