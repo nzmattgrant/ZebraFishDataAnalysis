@@ -36,6 +36,8 @@ def get_bulked_out_labels_for_timestamps(timestamp_list):
             current_datetime = get_datetime_from_date_and_timestamp(current_date, val[0])
         night_start_today = get_datetime_from_date_and_timestamp(current_date, config.nightStartTime, False)
         morning_start_today = get_datetime_from_date_and_timestamp(current_date, config.dayStartTime, False)
+        if night_start_today < morning_start_today:
+            night_start_today = get_datetime_from_date_and_timestamp(current_date + timedelta(days=1), config.nightStartTime, False)
         is_night = current_datetime > night_start_today or current_datetime < morning_start_today
         is_day = is_night is False
         is_night_to_day_change = (last_label == night_label or last_label is None) and is_day
