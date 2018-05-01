@@ -77,7 +77,10 @@ def get_transormed_data_from_input_file_for_fish_groups(fileName):
             if group_num == len(config.groups):
                 group_num = 0
             group_num += 1
-    return averaged_rows
+    if config.isDeletingLast10MinsFromEachSheet:
+        return averaged_rows[:-2]
+    else:
+        return averaged_rows
 
 def get_transormed_data_from_input_file_for_individual_fish(fileName):
 
@@ -92,7 +95,10 @@ def get_transormed_data_from_input_file_for_individual_fish(fileName):
     for index, row in df.iterrows():
         if check_is_well_exluded(index, config.numberOfCells) is False:
             rows.append(create_single_fish_row(row, (index % config.numberOfCells) + 1))
-    return rows
+    if config.isDeletingLast10MinsFromEachSheet:
+        return rows[:-(config.numberOfCells*2)]
+    else:
+        return rows
 
 
 def process_data_files_for_fish_groups(input_files):

@@ -1,6 +1,7 @@
 import ProcessData
 import GraphData
 import FormatDataForClockLab
+import FormatDataForChronosFit
 from Configuration import Configuration
 
 def Main():
@@ -15,6 +16,9 @@ def Main():
 
     if config.isGeneratingClocklabFiles:
         FormatDataForClockLab.create_clock_lab_formatted_file()
+
+    if config.isGeneratingChronosFitFile:
+        FormatDataForChronosFit.create_cronos_fit_formatted_file()
 
 if __name__ == "__main__":
     Main()

@@ -29,10 +29,12 @@
 	"isShowingStandardError": true,
 	"isDroppingEverySecondRow": true,
 	"isProcessingDataFirst": false,
-	"isGeneratingGraph": true,
+	"isGeneratingGraph": false,
 	"isShowingIndividualFish": false,
 	"isGeneratingClocklabFiles": false,
 	"isShowingSingleGraphPerGroup": false,
+	"isDeletingLast10MinsFromEachSheet": true,
+	"isGeneratingChronosFitFile": true,
 	"startDate": "2018-4-3",
 	"usage": [
 		"This property is for documentation purposes only. to use this configuration file change the values that you want changed before running the program.",
