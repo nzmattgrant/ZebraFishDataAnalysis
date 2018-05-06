@@ -15,7 +15,7 @@ def Main():
         GraphData.create_plots()
 
     if config.isGeneratingClocklabFiles:
-        FormatDataForClockLab.create_clock_lab_formatted_file()
+        FormatDataForClockLab.create_clock_lab_formatted_bulked_out_with_zeros_text_file()
 
     if config.isGeneratingChronosFitFile:
         FormatDataForChronosFit.create_cronos_fit_formatted_file()

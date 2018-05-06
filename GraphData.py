@@ -51,6 +51,27 @@ def get_bulked_out_labels_for_timestamps(timestamp_list):
 
     return x_labels
 
+import numpy, scipy.optimize
+
+def fit_sin(tt, yy):
+    #from stack overflow
+    '''Fit sin to the input time sequence, and return fitting parameters "amp", "omega", "phase", "offset", "freq", "period" and "fitfunc"'''
+    tt = numpy.array(tt)
+    yy = numpy.array(yy)
+    ff = numpy.fft.fftfreq(len(tt), (tt[1]-tt[0]))   # assume uniform spacing
+    Fyy = abs(numpy.fft.fft(yy))
+    guess_freq = abs(ff[numpy.argmax(Fyy[1:])+1])   # excluding the zero frequency "peak", which is related to offset
+    guess_amp = numpy.std(yy) * 2.**0.5
+    guess_offset = numpy.mean(yy)
+    guess = numpy.array([guess_amp, 2.*numpy.pi*guess_freq, 0., guess_offset])
+
+    def sinfunc(t, A, w, p, c):  return A * numpy.sin(w*t + p) + c
+    popt, pcov = scipy.optimize.curve_fit(sinfunc, tt, yy, p0=guess)
+    A, w, p, c = popt
+    f = w/(2.*numpy.pi)
+    fitfunc = lambda t: A * numpy.sin(w*t + p) + c
+    return {"amp": A, "omega": w, "phase": p, "offset": c, "freq": f, "period": 1./f, "fitfunc": fitfunc, "maxcov": numpy.max(pcov), "rawres": (guess,popt,pcov)}
+
 def create_sub_plot_data_set(color, label, isErrorPlot=False):
 
     file = pd.ExcelFile(config.outputFileName)
@@ -64,6 +85,10 @@ def create_sub_plot_data_set(color, label, isErrorPlot=False):
         plt.errorbar(y=df_for_group[config.xAxisColumn], x=timestamp_range, yerr=df_for_group[std_error_column], label=label, color=color, errorevery=1, elinewidth=0.75, capsize=2)
     else:
         plt.plot(df_for_group[config.xAxisColumn], label=label, color=color)
+
+    if config.isFittingCosineCurve:
+        result = fit_sin(timestamp_range, df_for_group[config.xAxisColumn].values)
+        plt.plot(timestamp_range, result["fitfunc"](timestamp_range), "r-", label="y fit curve", linewidth=2)
     plt.xticks(timestamp_range, x_labels)
 
 def get_non_blank_labels_with_indexes(x_ticks):
