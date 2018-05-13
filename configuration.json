@@ -30,7 +30,7 @@
 	"isDroppingEverySecondRow": true,
 	"isProcessingDataFirst": false,
 	"isGeneratingGraph": false,
-	"isShowingIndividualFish": false,
+	"isShowingIndividualFish": true,
 	"isGeneratingClocklabFiles": true,
 	"isShowingSingleGraphPerGroup": false,
 	"isDeletingLast10MinsFromEachSheet": true,

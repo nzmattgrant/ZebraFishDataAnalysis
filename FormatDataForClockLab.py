@@ -26,11 +26,25 @@ def write_file_lines(file, df):
         file.write(formatted_date + "  " + '{0:0.3f}'.format(value).zfill(9) + "\n")
 
 def write_padded_file_lines(file, df):
+
+    is_first_loop = True
+    current_date = parser.parse(config.startDate)
+    previous_date_time = current_date
     for index, row in df.iterrows():
+        date_time = get_datetime_from_date_and_timestamp(current_date.date(), row[config.timestampColumn])
+        if date_time < previous_date_time:
+            current_date = current_date + timedelta(days=1)
+            date_time = get_datetime_from_date_and_timestamp(current_date.date(), row[config.timestampColumn])
         value = row[config.xAxisColumn]
+        time_difference = date_time.replace(second=0, microsecond=0) - previous_date_time.replace(second=0, microsecond=0)
+        if date_time.replace(second=0, microsecond=0) != (previous_date_time.replace(second=0, microsecond=0) + timedelta(minutes=10)) and not is_first_loop:
+            for num in range((time_difference.seconds//60) - 10):
+                file.write("0\n")
         file.write(str(value) + "\n")
         for num in range(9):
             file.write("0\n")
+        is_first_loop = False
+        previous_date_time = date_time
 
 def write_to_bbcl_file(file_name, df_for_group):
     with open(file_name, 'w') as file:
