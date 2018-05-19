@@ -81,8 +81,18 @@ def create_sub_plot_data_set(color, label, isErrorPlot=False):
     timestamp_list_len = len(timestamp_list)
     timestamp_range = range(timestamp_list_len)
     std_error_column = config.xAxisColumn + "_standard_error"
+    plt.ylim(config.yAxisStart, config.yAxisLimit)
     if isErrorPlot:
-        plt.errorbar(y=df_for_group[config.xAxisColumn], x=timestamp_range, yerr=df_for_group[std_error_column], label=label, color=color, errorevery=1, elinewidth=0.75, capsize=2)
+        markers, caps, bars = plt.errorbar(y=df_for_group[config.xAxisColumn],
+                     x=timestamp_range,
+                     yerr=df_for_group[std_error_column],
+                     label=label,
+                     color=color,
+                     errorevery=1,
+                     elinewidth=0.75,
+                     capsize=2)
+        [bar.set_alpha(0.5) for bar in bars]
+        [cap.set_alpha(0.5) for cap in caps]
     else:
         plt.plot(df_for_group[config.xAxisColumn], label=label, color=color)
 
@@ -176,7 +186,8 @@ def create_xticks():
 def create_plots_for_single_fish():
 
     group_size = config.numberOfCells / len(config.groups)
-    for well_number in range(1, config.numberOfCells + 1):
+    well_numbers = [i for i in range(1, config.numberOfCells + 1) if i not in config.wellsToExclude]
+    for well_number in well_numbers:
         plt.cla()
         current_group_index = math.floor((well_number - 1) / group_size)
         group = config.groups[current_group_index]

@@ -3,16 +3,16 @@
 	"inputFileSheetName": "Data",
 	"outputFileName": "data_cleaned.xlsx",
 	"outputFileSheetName": "Data",
-	"wellsToExclude": [1, 9, 10],
+	"wellsToExclude": [],
 	"individualFishToInclude": [],
 	"xAxisColumn": "lardist",
 	"groups": [{
 			"label": "Wild type",
-			"color": "green"
+			"color": "purple"
 		},
 		{
 			"label": "Mutant",
-			"color": "purple"
+			"color": "black"
 		}],
 	"xAxisLabel": "Days",
 	"yAxisLabel": "Distance moved (mm/10 mins)",
@@ -26,17 +26,20 @@
 	"nightColor": "#000000",
 	"startDay": 5,
 	"numberOfCells": 96,
-	"isShowingStandardError": false,
+	"isShowingStandardError": true,
 	"isDroppingEverySecondRow": true,
-	"isProcessingDataFirst": false,
-	"isGeneratingGraph": false,
-	"isShowingIndividualFish": true,
+	"isProcessingDataFirst": true,
+	"isGeneratingGraph": true,
+	"isShowingIndividualFish": false,
 	"isGeneratingClocklabFiles": false,
 	"isShowingSingleGraphPerGroup": false,
 	"isDeletingLast10MinsFromEachSheet": true,
 	"isGeneratingChronosFitFile": false,
 	"isFittingCosineCurve": false,
-	"isGeneratingDistanceSums": true,
+	"isGeneratingDistanceSums": false,
+	"yAxisStart": 0,
+	"yAxisLimit": 400,
+	"errorBarTransparency": 0.75,
 	"startDate": "2018-4-3",
 	"usage": [
 		"This property is for documentation purposes only. to use this configuration file change the values that you want changed before running the program.",
