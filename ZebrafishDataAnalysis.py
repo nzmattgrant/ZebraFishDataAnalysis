@@ -2,6 +2,7 @@ import ProcessData
 import GraphData
 import FormatDataForClockLab
 import FormatDataForChronosFit
+import DataFormatter
 from Configuration import Configuration
 
 def Main():
@@ -19,6 +20,9 @@ def Main():
 
     if config.isGeneratingChronosFitFile:
         FormatDataForChronosFit.create_cronos_fit_formatted_file()
+
+    if config.isShowingIndividualFish and config.isGeneratingDistanceSums:
+        DataFormatter.generate_distance_sums_for_individual_fish()
 
 if __name__ == "__main__":
     Main()

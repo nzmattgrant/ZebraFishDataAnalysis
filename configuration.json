@@ -3,7 +3,7 @@
 	"inputFileSheetName": "Data",
 	"outputFileName": "data_cleaned.xlsx",
 	"outputFileSheetName": "Data",
-	"wellsToExclude": [],
+	"wellsToExclude": [1, 9, 10],
 	"individualFishToInclude": [],
 	"xAxisColumn": "lardist",
 	"groups": [{
@@ -31,15 +31,17 @@
 	"isProcessingDataFirst": false,
 	"isGeneratingGraph": false,
 	"isShowingIndividualFish": true,
-	"isGeneratingClocklabFiles": true,
+	"isGeneratingClocklabFiles": false,
 	"isShowingSingleGraphPerGroup": false,
 	"isDeletingLast10MinsFromEachSheet": true,
 	"isGeneratingChronosFitFile": false,
 	"isFittingCosineCurve": false,
+	"isGeneratingDistanceSums": true,
 	"startDate": "2018-4-3",
 	"usage": [
 		"This property is for documentation purposes only. to use this configuration file change the values that you want changed before running the program.",
 		"To update the wells to exclude you would update the property 'wellsToExclude' and add the cell numbers in the square brackets separated by commas e.g. [7, 36]",
-		"Possible values of 'xAxisColumn' are the values specified in 'distanceColumn' or 'durationColumn' e.g. lardist or or lardur"
+		"Possible values of 'xAxisColumn' are the values specified in 'distanceColumn' or 'durationColumn' e.g. lardist or or lardur",
+		"Note: isGeneratingDistanceAverages only works for the case where we have generated the data for individual fish"
 	]
 }
