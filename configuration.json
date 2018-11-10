@@ -30,7 +30,7 @@
 	"isDroppingEverySecondRow": true,
 	"isProcessingDataFirst": true,
 	"isGeneratingGraph": true,
-	"isShowingIndividualFish": false,
+	"isShowingIndividualFish": true,
 	"isGeneratingClocklabFiles": false,
 	"isShowingSingleGraphPerGroup": false,
 	"isDeletingLast10MinsFromEachSheet": true,
@@ -39,7 +39,7 @@
 	"isGeneratingDistanceSums": false,
 	"yAxisStart": 0,
 	"yAxisLimit": 400,
-	"errorBarTransparency": 0.75,
+	"errorBarTransparency": 0.5,
 	"startDate": "2018-4-3",
 	"usage": [
 		"This property is for documentation purposes only. to use this configuration file change the values that you want changed before running the program.",

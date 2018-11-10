@@ -89,10 +89,10 @@ def create_sub_plot_data_set(color, label, isErrorPlot=False):
                      label=label,
                      color=color,
                      errorevery=1,
-                     elinewidth=0.75,
+                     elinewidth=1,
                      capsize=2)
-        [bar.set_alpha(0.5) for bar in bars]
-        [cap.set_alpha(0.5) for cap in caps]
+        [bar.set_alpha(config.errorBarTransparency) for bar in bars]
+        [cap.set_alpha(config.errorBarTransparency) for cap in caps]
     else:
         plt.plot(df_for_group[config.xAxisColumn], label=label, color=color)
 
