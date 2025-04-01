@@ -113,7 +113,7 @@ def process_data_files_for_fish_groups(input_files):
     for index, group in enumerate(config.groups):
         df.loc[df["group"] == index + 1].reset_index(drop=True).to_excel(writer, sheet_name=group["label"])
 
-    writer.save()
+    writer.close()
 
 def process_data_files_individual_fish(input_files):
     data_rows = []
@@ -130,7 +130,7 @@ def process_data_files_individual_fish(input_files):
         sheet_name = config.groups[current_group_index]["label"] + " well number " + str(well_number)
         df.loc[df["group"] == well_number].reset_index(drop=True).to_excel(writer, sheet_name=sheet_name)
 
-    writer.save()
+    writer.close()
 
 def process_data_files():
 

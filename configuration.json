@@ -1,6 +1,6 @@
 {
 	"inputFileDirectory": "InputFiles",
-	"inputFileSheetName": "Data",
+	"inputFileSheetName": "LD_WT",
 	"outputFileName": "data_cleaned.xlsx",
 	"outputFileSheetName": "Data",
 	"wellsToExclude": [],
@@ -30,7 +30,7 @@
 	"isDroppingEverySecondRow": true,
 	"isProcessingDataFirst": true,
 	"isGeneratingGraph": true,
-	"isShowingIndividualFish": true,
+	"isShowingIndividualFish": false,
 	"isGeneratingClocklabFiles": false,
 	"isShowingSingleGraphPerGroup": false,
 	"isDeletingLast10MinsFromEachSheet": true,
